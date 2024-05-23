@@ -1,5 +1,7 @@
 # privue-demo
 
+link to the demo page: https://privue-demo-wdxg3n5hvmu2gcv8ypw432.streamlit.app/  
+
 In first tab (Privatization Example), we will present the privatization technique SUE-LDP in action.  
 You need to specify the limits of the range from which you want to privatize values- [Min value, Max value].  
 Select the number of buckets (d). The range will be divided evenly into sub-sections, according to this parameter.  
