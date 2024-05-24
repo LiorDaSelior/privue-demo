@@ -43,7 +43,7 @@ if tab1.button("Run the privatization!", type="primary"):
     tab1.header("This is what leaves the user's device (Privatized value):")
     tab1.bar_chart(client.get_private_vector(epsilon, max_value, min_value, bucket_number, user_value))
     tab1.write("Table - which sub-section each index represents (high probability candidates for the original value):")
-    tab1.table(util.get_granularity_dataframe(min_value, max_value, bucket_number))
+    tab1.table(util.get_granularity_dataframe(max_value, min_value, bucket_number))
 
 
 ### tab 2 ###
@@ -201,7 +201,7 @@ def present_results():
         for value_result in res:
             tab3.write(f"Average histogram for value {value_index+1}:")
             tab3.bar_chart(value_result[1])
-            tab3.table(util.get_granularity_dataframe(attr_list[value_index][1], attr_list[value_index][0], attr_list[value_index][2]))
+            tab3.table(util.get_granularity_dataframe(attr_list[value_index][0], attr_list[value_index][1], attr_list[value_index][2]))
             tab3.write(f"Estimated average for value {value_index+1} = {value_result[0]}")
             tab3.markdown("***")
             value_index += 1
