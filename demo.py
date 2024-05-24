@@ -40,7 +40,7 @@ max_value = tab1.number_input("Max. Value", value = st.session_state["max_value"
 bucket_number = int(tab1.number_input("Bucket number", value = 20, step = 1, min_value=1))
 user_value = tab1.number_input("User value (to be privatized)")
 
-if tab1.button("Run the privatization!", type="primary"):
+if tab1.button("Run the privatization", type="primary"):
     tab1.header("This is what leaves the user's device (Privatized value):")
     tab1.bar_chart(client.get_private_vector(epsilon, max_value, min_value, bucket_number, user_value))
     tab1.write("Table - which sub-section each index represents (high probability candidates for the original value):")
