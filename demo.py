@@ -1,6 +1,7 @@
 import json
 import privue.client as client
 import privue.util as util
+from privue.errors import ValuePropertyMissing
 import streamlit as st
 
 
@@ -59,6 +60,7 @@ def save_data():
     except AttributeError:
         st.session_state["file_input_data_str"] = None
     st.session_state["file_output_data_str"] = None
+    st.session_state["warning_flag"] = False
 
 if "start_flag" not in st.session_state:
     for j in range(0,6):
@@ -157,7 +159,15 @@ def submit_btn_func():
     min_value_per_attr_iter = [st.session_state[f"attr_data_{i}"][0] for i in range(attr_number)]
     max_value_per_attr_iter = [st.session_state[f"attr_data_{i}"][1] for i in range(attr_number)]
     bucket_amount_per_attr_iter = [st.session_state[f"attr_data_{i}"][2] for i in range(attr_number)]
-    st.session_state["file_output_data_str"] = util.privatize_json_str(st.session_state["file_input_data_str"], st.session_state["epsilon_val"], max_value_per_attr_iter, min_value_per_attr_iter, bucket_amount_per_attr_iter)
+    try:
+        st.session_state["file_output_data_str"] = util.privatize_json_str(st.session_state["file_input_data_str"], st.session_state["epsilon_val"], max_value_per_attr_iter, min_value_per_attr_iter, bucket_amount_per_attr_iter)
+    except ValuePropertyMissing:
+        st.session_state["warning_flag"] = True
+        del st.session_state["start_flag"]
+
+
+if "warning_flag" in st.session_state and st.session_state["warning_flag"] == True:
+    tab2.error("Mismatch in number of values. Please check that each record in your file contains the number of values you have selected.", icon="⛔")
 
 if "file_input_data_str" in st.session_state and st.session_state["file_input_data_str"] is not None:
     tab2.button(
@@ -195,7 +205,6 @@ def present_results():
         json_str = st.session_state["privatized_file_input"].getvalue().decode("utf-8")
         res = util.avg_estimation_with_json_str(json_str, True)
         attr_list = json.loads(json_str)["attr_data"]
-        print(res)
         tab3.write("Results:")
         value_index = 0
         for value_result in res:
